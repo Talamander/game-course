@@ -1,9 +1,15 @@
 extends KinematicBody2D
 
-var motion = Vector2.ZERO
-var acceleration = 3000
-var speed = 500
+const PlayerBullet = preload("res://Projectiles/PlayerBullet.tscn")
 
+onready var muzzle = $Muzzle
+
+export(int) var acceleration = 3000
+export(int) var speed = 500
+export(int) var bullet_speed = 1200
+
+
+var motion = Vector2.ZERO
 
 
 func _physics_process(delta):
@@ -16,7 +22,12 @@ func _physics_process(delta):
 		
 	look_rotation()
 	
+	if Input.is_action_just_pressed("fire"):
+		fire_bullet()
+	
 	motion = move_and_slide(motion)
+
+
 
 
 func get_input_vector():
@@ -36,9 +47,15 @@ func apply_friction(friction):
 func calc_movement(acceleration):
 	motion += acceleration
 	motion = motion.clamped(speed)
-	
 
 func look_rotation():
 	
 	var look_vector = get_global_mouse_position() - global_position
 	global_rotation = atan2(look_vector.y, look_vector.x)
+
+
+func fire_bullet():
+	var bullet = Global.instance_scene_on_main(PlayerBullet, muzzle.global_position)
+	bullet.velocity = Vector2.RIGHT.rotated(self.rotation) * bullet_speed
+	bullet.set_rotation(global_rotation)
+	
