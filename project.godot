@@ -16,8 +16,13 @@ _global_script_class_icons={
 [application]
 
 config/name="Course"
-run/main_scene="res://Player/Player.tscn"
+run/main_scene="res://World/World.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/test_width=1280
+window/size/test_height=720
 
 [input]
 
