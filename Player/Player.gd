@@ -4,9 +4,9 @@ const PlayerBullet = preload("res://Projectiles/PlayerBullet.tscn")
 
 onready var muzzle = $Muzzle
 
-export(int) var acceleration = 3000
+export(int) var acceleration = 4000
 export(int) var speed = 500
-export(int) var bullet_speed = 1200
+export(int) var bullet_speed = 1500
 
 
 var motion = Vector2.ZERO
@@ -55,7 +55,7 @@ func look_rotation():
 
 
 func fire_bullet():
-	var bullet = Global.instance_scene_on_main(PlayerBullet, muzzle.global_position)
+	var bullet = Global.instance_scene_on_main(PlayerBullet, muzzle.global_position, muzzle.global_rotation)
 	bullet.velocity = Vector2.RIGHT.rotated(self.rotation) * bullet_speed
 	bullet.set_rotation(global_rotation)
 	

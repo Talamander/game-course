@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Projectiles/Bullet.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Projectiles/Square.png" type="Texture" id=2]
 [ext_resource path="res://Projectiles/PlayerBullet.gd" type="Script" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 8, 3 )
 
 [node name="PlayerBullet" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
@@ -10,3 +13,13 @@ script = ExtResource( 3 )
 [node name="Sprite" parent="." index="0"]
 scale = Vector2( 1, 0.299 )
 texture = ExtResource( 2 )
+
+[node name="Hitbox" parent="." index="2"]
+collision_layer = 0
+collision_mask = 5
+
+[node name="CollisionShape2D" parent="Hitbox" index="0"]
+shape = SubResource( 1 )
+[connection signal="body_entered" from="Hitbox" to="." method="_on_Hitbox_body_entered"]
+
+[editable path="Hitbox"]
