@@ -4,10 +4,13 @@ var pistolSprite = preload("res://Player/Art/survivor1_gun.png")
 var machinegunSprite = preload("res://Player/Art/survivor1_machine.png")
 
 const PlayerBullet = preload("res://Projectiles/PlayerBullet.tscn")
+const muzzleFlash = preload("res://Effects/MuzzleFlashEffect.tscn")
 
 onready var muzzle = $Muzzle
 onready var playerSprite = $Sprite
 onready var fireRate = $fireRate
+export(float) var pistol_fire_rate = .3
+export(float) var machinegun_fire_rate =.09
 
 export(int) var acceleration = 4000
 export(int) var speed = 500
@@ -17,6 +20,8 @@ var current_weapon = 1
 
 var motion = Vector2.ZERO
 
+func _ready():
+	fireRate.set_wait_time(pistol_fire_rate)
 
 func _physics_process(delta):
 	var input_vector = get_input_vector()
@@ -62,17 +67,19 @@ func look_rotation():
 
 
 func fire_bullet():
+	Global.instance_scene_on_main(muzzleFlash, muzzle.global_position, muzzle.global_rotation)
 	var bullet = Global.instance_scene_on_main(PlayerBullet, muzzle.global_position, muzzle.global_rotation)
 	bullet.velocity = Vector2.RIGHT.rotated(self.rotation) * bullet_speed
 	bullet.set_rotation(global_rotation)
 	fireRate.start()
+	motion -= bullet.velocity * .15
 
 func change_weapon():
 	if Input.is_action_just_pressed("pistol_select"):
 		current_weapon = 1
 		playerSprite.set_texture(pistolSprite)
-		fireRate.set_wait_time(.3)
+		fireRate.set_wait_time(pistol_fire_rate)
 	elif Input.is_action_just_pressed("machinegun_select"):
 		current_weapon = 2
 		playerSprite.set_texture(machinegunSprite)
-		fireRate.set_wait_time(.09)
+		fireRate.set_wait_time(machinegun_fire_rate)
