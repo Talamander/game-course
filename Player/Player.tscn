@@ -23,3 +23,5 @@ shape = SubResource( 1 )
 
 [node name="Muzzle" type="Position2D" parent="."]
 position = Vector2( 30, 9 )
+
+[node name="FocalPoint" type="RemoteTransform2D" parent="."]
