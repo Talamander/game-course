@@ -1,24 +1,29 @@
 extends KinematicBody2D
 
-var pistolSprite = preload("res://Player/Art/survivor1_gun.png")
-var machinegunSprite = preload("res://Player/Art/survivor1_machine.png")
-
+#Constants
 const PlayerBullet = preload("res://Projectiles/PlayerBullet.tscn")
 const muzzleFlash = preload("res://Effects/MuzzleFlashEffect.tscn")
 
+#Weapon Sprites
+var pistolSprite = preload("res://Player/Art/survivor1_gun.png")
+var machinegunSprite = preload("res://Player/Art/survivor1_machine.png")
+
+#Weapon Related Variables
 onready var muzzle = $Muzzle
-onready var playerSprite = $Sprite
 onready var fireRate = $fireRate
 export(float) var pistol_fire_rate = .3
 export(float) var machinegun_fire_rate =.09
+var current_weapon = 1
 
+#Player Sprite
+onready var playerSprite = $Sprite
+
+#Player Movement Variables
 export(int) var acceleration = 4000
 export(int) var speed = 500
 export(int) var bullet_speed = 1500
-
-var current_weapon = 1
-
 var motion = Vector2.ZERO
+
 
 func _ready():
 	fireRate.set_wait_time(pistol_fire_rate)
@@ -43,6 +48,7 @@ func _physics_process(delta):
 
 
 func get_input_vector():
+	#Input vector is keyboard input
 	var input_vector = Vector2.ZERO
 	
 	input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
@@ -51,30 +57,36 @@ func get_input_vector():
 	return input_vector.normalized()
 
 func apply_friction(friction):
+	#Friction is friction. This alters the snappiness of the movement
 	if motion.length() > friction:
 		motion -= motion.normalized() * friction
 	else:
 		motion = Vector2.ZERO
 
 func calc_movement(acceleration):
+	#Acceleration is how quickly we can reach top-speed
 	motion += acceleration
 	motion = motion.clamped(speed)
 
 func look_rotation():
-	
+	#Gets the rotation based on mouse position
 	var look_vector = get_global_mouse_position() - global_position
 	global_rotation = atan2(look_vector.y, look_vector.x)
 
 
 func fire_bullet():
+	#Instances muzzleflash
 	Global.instance_scene_on_main(muzzleFlash, muzzle.global_position, muzzle.global_rotation)
+	#Instances playerbullet scene
 	var bullet = Global.instance_scene_on_main(PlayerBullet, muzzle.global_position, muzzle.global_rotation)
 	bullet.velocity = Vector2.RIGHT.rotated(self.rotation) * bullet_speed
-	bullet.set_rotation(global_rotation)
+	#Restarts fireRate timer
 	fireRate.start()
+	#Recoil
 	motion -= bullet.velocity * .15
 
 func change_weapon():
+	#Weapon changes based on keyboard input
 	if Input.is_action_just_pressed("pistol_select"):
 		current_weapon = 1
 		playerSprite.set_texture(pistolSprite)
