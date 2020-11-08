@@ -6,9 +6,44 @@
 
 [node name="World" type="Node2D"]
 
-[node name="BG Grass" type="TextureRect" parent="."]
+[node name="Background" type="Control" parent="."]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BG Grass" type="TextureRect" parent="Background"]
 margin_right = 4096.0
 margin_bottom = 4096.0
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BG Grass2" type="TextureRect" parent="Background"]
+margin_left = -4096.0
+margin_bottom = 4096.0
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BG Grass3" type="TextureRect" parent="Background"]
+margin_top = -4096.0
+margin_right = 4096.0
+texture = ExtResource( 3 )
+expand = true
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BG Grass4" type="TextureRect" parent="Background"]
+margin_left = -4096.0
+margin_top = -4096.0
 texture = ExtResource( 3 )
 expand = true
 stretch_mode = 2

@@ -1,13 +1,19 @@
 extends KinematicBody2D
 
+var pistolSprite = preload("res://Player/Art/survivor1_gun.png")
+var machinegunSprite = preload("res://Player/Art/survivor1_machine.png")
+
 const PlayerBullet = preload("res://Projectiles/PlayerBullet.tscn")
 
 onready var muzzle = $Muzzle
+onready var playerSprite = $Sprite
+onready var fireRate = $fireRate
 
 export(int) var acceleration = 4000
 export(int) var speed = 500
 export(int) var bullet_speed = 1500
 
+var current_weapon = 1
 
 var motion = Vector2.ZERO
 
@@ -21,8 +27,9 @@ func _physics_process(delta):
 		calc_movement(input_vector * acceleration * delta)
 		
 	look_rotation()
+	change_weapon()
 	
-	if Input.is_action_just_pressed("fire"):
+	if Input.is_action_pressed("fire") && fireRate.time_left == 0:
 		fire_bullet()
 	
 	motion = move_and_slide(motion)
@@ -58,4 +65,14 @@ func fire_bullet():
 	var bullet = Global.instance_scene_on_main(PlayerBullet, muzzle.global_position, muzzle.global_rotation)
 	bullet.velocity = Vector2.RIGHT.rotated(self.rotation) * bullet_speed
 	bullet.set_rotation(global_rotation)
-	
+	fireRate.start()
+
+func change_weapon():
+	if Input.is_action_just_pressed("pistol_select"):
+		current_weapon = 1
+		playerSprite.set_texture(pistolSprite)
+		fireRate.set_wait_time(.3)
+	elif Input.is_action_just_pressed("machinegun_select"):
+		current_weapon = 2
+		playerSprite.set_texture(machinegunSprite)
+		fireRate.set_wait_time(.09)

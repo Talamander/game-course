@@ -25,3 +25,6 @@ shape = SubResource( 1 )
 position = Vector2( 30, 9 )
 
 [node name="FocalPoint" type="RemoteTransform2D" parent="."]
+
+[node name="fireRate" type="Timer" parent="."]
+one_shot = true
